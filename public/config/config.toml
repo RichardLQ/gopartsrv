@@ -1,0 +1,96 @@
+env = "pro"
+
+[database]
+[database.pro]
+[database.pro.work]
+host = "101.34.43.100"
+port = "3306"
+username = "qiaolei"
+password = "e07454996f04fbdccfc2acddbf1a7507bc61a4373e2cd039"
+#password = "imslimsl"
+database = "work"
+charset = "utf8mb4"
+connect_timeout = 1
+read_timeout = 3
+write_timeout = 3
+max_idle_conn = 100
+max_open_conn = 200
+
+[database.dev]
+[database.dev.work]
+host = "101.34.43.100"
+port = "3306"
+username = "qiaolei"
+password = "e07454996f04fbdccfc2acddbf1a7507bc61a4373e2cd039"
+#password = "imslimsl"
+database = "work"
+charset = "utf8mb4"
+connect_timeout = 1
+read_timeout = 3
+write_timeout = 3
+max_idle_conn = 100
+max_open_conn = 200
+
+[database.dev.test]
+host = "127.0.0.1"
+port = "3306"
+username = "qiaolei"
+password = "qiaolei"
+#password = "imslimsl"
+database = "test"
+charset = "utf8mb4"
+connect_timeout = 1
+read_timeout = 3
+write_timeout = 3
+max_idle_conn = 100
+max_open_conn = 200
+
+[redis]
+[redis.pro]
+[redis.pro.work]
+host = "127.0.0.1"
+port = "6379"
+connect_timeout = 2
+read_timeout = 1
+write_timeout = 1
+max_idle = 10
+idle_timeout = 240
+
+[redis.dev]
+[redis.dev.work]
+host = "127.0.0.1"
+port = "6379"
+connect_timeout = 2
+read_timeout = 1
+write_timeout = 1
+max_idle = 10
+idle_timeout = 240
+
+[email]
+[email.pro]
+[email.pro.jerome]
+host = "smtp.qq.com"
+port = 25
+username = "961922850@qq.com"
+password = "muvgdorellxkbdee"
+
+[email.dev]
+[email.dev.jerome]
+host = "smtp.qq.com"
+port = 25
+username = "961922850@qq.com"
+password = "muvgdorellxkbdee"
+
+[sqlite]
+[sqlite.pro]
+[sqlite.pro.piclist]
+#address = "G:/gowork/public/config/piclist.db"
+address = "/goProject/gowork/public/config/piclist.db"
+max_idle_conn = 100
+max_open_conn = 200
+
+[sqlite.dev]
+[sqlite.dev.piclist]
+address = "D:/wwwroot/gowork/public/config/piclist.db"
+max_idle_conn = 100
+max_open_conn = 200

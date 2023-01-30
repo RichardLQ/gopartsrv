@@ -1,0 +1,15 @@
+# Config of Goland IDE
+.idea/
+
+# Config of Vscode
+.vscode/
+
+# database cofig
+#*toml
+
+# mac config
+.DS_Store
+
+/logs/*
+#log
+public/logs/*
