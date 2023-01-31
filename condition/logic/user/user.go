@@ -4,9 +4,10 @@ import (
 	"gopartsrv/condition/model"
 )
 
-func UserInfo(userId string) (*model.Users, error) {
+func UserInfo(userId,openid string) (*model.Users, error) {
 	var user model.Users
 	user.Id = userId
+	user.Openid = openid
 	list, err := user.Find()
 	if err != nil {
 		return &model.Users{}, err

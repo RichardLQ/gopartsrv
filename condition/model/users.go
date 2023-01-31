@@ -11,7 +11,7 @@ var (
 
 //获取连接
 func init() {
-	dbs = db.DBTeamMap["work"] //同一个db
+	dbs = db.DBTeamMap["mini"] //同一个db
 }
 
 //用户信息

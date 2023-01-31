@@ -9,6 +9,6 @@ import (
 func IndexRouter(e *gin.Engine) {
 	v1 := e.Group("/index")
 	{
-		v1.GET("/banner", index.Banner)
+		v1.GET("/hotlist", index.Hotlist)
 	}
 }
