@@ -6,7 +6,7 @@ import (
 
 //获取连接
 func init() {
-	dbs = db.DBTeamMap["work"] //同一个db
+	dbs = db.DBTeamMap["mini"] //同一个db
 }
 
 //订单
@@ -20,13 +20,13 @@ type Order struct {
 	Deletetime string `json:"deletetime"`
 }
 //获取表名
-func (b *Order) TableName() string {
+func (u *Order) TableName() string {
 	return "order"
 }
 
 //查询内容(id 查询)
-func (u *Order) Find() (*Order, error) {
-	list := &Order{}
+func (u *Order) Find() (*[]Order, error) {
+	list := &[]Order{}
 	sqls := dbs.Table(u.TableName())
 	if u.Id != "" {
 		sqls = sqls.Where("id = ?", u.Id)
@@ -34,9 +34,9 @@ func (u *Order) Find() (*Order, error) {
 	if u.Openid != "" {
 		sqls = sqls.Where("openid = ?", u.Openid)
 	}
-	err := sqls.Find(list).Limit(1).Error
+	err := sqls.Find(list).Error
 	if err != nil {
-		return &Order{}, err
+		return &[]Order{}, err
 	}
 	return list, nil
 }

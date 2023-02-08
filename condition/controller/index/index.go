@@ -9,7 +9,7 @@ import (
 func Hotlist(c *gin.Context) {
 	userId := c.Query("userid")
 	openid := c.Query("openid")
-	index.Hotlist(userId,openid)
-	c.JSON(http.StatusOK, gin.H{"errs": 1, "msg": "请求成功", "data": 1})
+	list,_:=index.Hotlist(userId,openid,2)
+	c.JSON(http.StatusOK, gin.H{"errs": 1, "msg": "请求成功", "data":list})
 	return
 }
