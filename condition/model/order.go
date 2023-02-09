@@ -40,5 +40,8 @@ func (u *Order) Find() (*[]Order, error) {
 	}
 	return list, nil
 }
+//查询开始和结束时间
+func FindTime()  {
 
+}
 

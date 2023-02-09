@@ -9,6 +9,7 @@ import (
 func IndexRouter(e *gin.Engine) {
 	v1 := e.Group("/index")
 	{
-		v1.GET("/hotlist", index.Hotlist)
+		v1.GET("/hotlist", index.Hotlist)// 热门列表
+		v1.GET("/partlist", index.Partlist)// 兼职列表
 	}
 }
