@@ -49,3 +49,26 @@ func (u *Partlist) Find(limit int, buy bool) (*[]Partlist, error) {
 	}
 	return list, nil
 }
+
+func (u *Partlist) Find2Search(page,pageSize int,buy bool) (*[]Partlist, error) {
+	list := &[]Partlist{}
+	sqls := dbs.Debug().Table(u.TableName())
+	if u.Hot != 0 {
+		sqls = sqls.Where("hot = ?", u.Hot)
+	}
+	if u.City != "" {
+		sqls = sqls.Where("city = ?", u.City)
+	}
+	if u.Area != "" {
+		sqls = sqls.Where("`area` = ?", u.Area)
+	}
+	if u.Content != "" {
+		sqls = sqls.Where("content like ?", "%"+u.Content+"%")
+	}
+	err := sqls.Select("*,? as buy", buy).Limit(pageSize).
+		Offset((page - 1) * pageSize).Find(list).Error
+	if err != nil {
+		return &[]Partlist{}, err
+	}
+	return list, nil
+}

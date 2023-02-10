@@ -31,7 +31,7 @@ func Partlist(c *gin.Context) {
 	search := c.Query("search")
 	city := c.Query("city")
 	area := c.Query("area")
-	list,err:=index.Hotlist(userId,openid,search,city,area,page,pageSize)
+	list,err:=index.Partlist(userId,openid,search,city,area,page,pageSize)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"errs": err, "msg": "请求失败", "data":list})
 		return
