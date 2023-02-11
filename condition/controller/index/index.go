@@ -1,6 +1,7 @@
 package index
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gopartsrv/condition/logic/index"
 	"net/http"
@@ -8,8 +9,8 @@ import (
 )
 //Hotlist 热门列表
 func Hotlist(c *gin.Context) {
-	userId := c.Query("userid")
-	openid := c.Query("openid")
+	userId,_ := c.GetPostForm("userid")
+	openid,_  := c.GetPostForm("openid")
 	list,err:=index.Hotlist(userId,openid,2)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"errs": err, "msg": "请求失败", "data":list})
@@ -22,15 +23,18 @@ func Hotlist(c *gin.Context) {
 
 //Partlist 兼职列表
 func Partlist(c *gin.Context) {
-	userId := c.Query("userid")
-	openid := c.Query("openid")
-	pages := c.Query("page")
+	userId := c.PostForm("userid")
+	openid := c.PostForm("openid")
+	pages := c.PostForm("page")
 	page, _ := strconv.Atoi(pages)
-	pageSizes := c.Query("pageSize")
+	pageSizes := c.PostForm("pageSize")
 	pageSize, _ := strconv.Atoi(pageSizes)
-	search := c.Query("search")
-	city := c.Query("city")
-	area := c.Query("area")
+	search := c.PostForm("search")
+	city := c.PostForm("city")
+	area := c.PostForm("area")
+	fmt.Println(city)
+	fmt.Println(area)
+	fmt.Println(search)
 	list,err:=index.Partlist(userId,openid,search,city,area,page,pageSize)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"errs": err, "msg": "请求失败", "data":list})
