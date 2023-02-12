@@ -14,7 +14,7 @@ type Order struct {
 	Id         string `json:"id"` //banner的id
 	Userid   int `json:"userid"`
 	Openid string `json:"openid"`
-	Amount float64 `json:"amount"`
+	Amount int64 `json:"amount"`
 	Createtime   string `json:"createtime"` //创建时间
 	Updatetime string `json:"updatetime"`
 	Deletetime string `json:"deletetime"`
@@ -39,6 +39,11 @@ func (u *Order) Find() (*[]Order, error) {
 		return &[]Order{}, err
 	}
 	return list, nil
+}
+
+func (u *Order) Create() (err error) {
+	err = dbs.Table(u.TableName()).Save(u).Error
+	return
 }
 //查询开始和结束时间
 func FindTime()  {

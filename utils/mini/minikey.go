@@ -8,21 +8,28 @@ import (
 const (
 	MENU_URL = " https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s"
 	TOKEN_URL ="https://sz.api.weixin.qq.com/cgi-bin/token?grant_type=%s&appid=%s&secret=%s"
+
 	GRANT_TYPE = "authorization_code"
 	//心路历程
-	APPID = "wxa100ef076707de49"
-	SECRET = "b54d634ca6b4f1282417852ca64ae207"
-	//记忆流沙
-	JY_APPID = "wxa35dbf88d2f73c04"
-	JY_SECRET = "13c7dfd67f605328db81ee873cc8fc14"
-	//避风港湾
-	BF_APPLD = "wxd94dfa3ae4faebe1"
-	BF_SECRET ="7e5a0659f5f11dfb6c83a50507ef3381"
+	APPID = "wxc055add4d2d04367"
+	SECRET = "2c315d992f26cbc89faeab0805b207ab"
+	//下单地址
+	ORDER_URL = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi"
+	MCHID = "1637163088"
 	BF_TOKEN ="SourCandyQiao"
 	BF_MSGTYPE = "event" //公众号消息类型
 	BF_MSGTYPETEXT = "text" //公众号消息类型
 	BF_EVENT_SUBSCEIBE = "subscribe" //订阅
 
+)
+//支付参数
+const (
+	Mchid                      = "1637163088"                                // 商户号
+	MchCertificateSerialNumber = "4F59EB541378CC84423AE305A596041C776967A1"  // 商户证书序列号
+	MchAPIv3Key                = "mADUjnHmfgTtqFk1rPvZJtBcmcqQ6C09"          // 商户APIv3密钥
+	MchPKFileName			 = "/usr/local/nginx/ssl/apiclient_key.pem"         // 下载的证书文件
+	ServerURL				 = "https://www.weixin.qq.com/wxpay/pay.php"         // 回调地址
+	Description    			 =  "龙猫社群 深圳圈"
 )
 
 //获取accesstoken

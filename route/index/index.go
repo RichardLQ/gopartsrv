@@ -11,5 +11,9 @@ func IndexRouter(e *gin.Engine) {
 	{
 		v1.POST("/hotlist", index.Hotlist)// 热门列表
 		v1.POST("/partlist", index.Partlist)// 兼职列表
+		v1.GET("/order", index.Order)// 下单
+		v1.GET("/orderCallback", index.OrderBack)// 支付回调
+		v1.GET("/getOpenid", index.GetOpenid) //获取openid
+
 	}
 }

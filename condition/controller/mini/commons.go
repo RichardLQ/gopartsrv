@@ -35,12 +35,7 @@ func Banner(c *gin.Context){
 //获取openid
 func GetOpenid(c *gin.Context) {
 	code := c.Query("code")
-	types := c.DefaultQuery("type","0")
 	urls:=fmt.Sprintf(consts.OPENIDURL,mini.APPID,mini.SECRET,code,mini.GRANT_TYPE)
-	switch types {
-		case "1":
-			urls = fmt.Sprintf(consts.OPENIDURL,mini.JY_APPID,mini.JY_SECRET,code,mini.GRANT_TYPE)
-	}
 	respStr:= consts.HttpGet(urls)
 	if gjson.Get(respStr,"errcode").Int() != 0{
 		c.JSON(http.StatusOK, gin.H{"ret":gjson.Get(respStr,"errcode").Int(),"msg": gjson.Get(respStr,"errmsg").String(), "data": ""})
