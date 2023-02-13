@@ -1,6 +1,7 @@
 package index
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gopartsrv/condition/logic/user"
 	"gopartsrv/condition/model"
@@ -40,11 +41,14 @@ func Order(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"errs": err,"code":2001, "msg": "请求失败", "data": ""})
 		return
 	}
+	fmt.Println(res)
+	fmt.Println(err)
 	list, err := user.UserInfo(userid,openid)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"errs": err,"code":2002, "msg": "请求失败", "data": ""})
 		return
 	}
+	fmt.Println(list)
 	order:=model.Order{
 		Id: list.Id,
 		Openid: list.Openid,

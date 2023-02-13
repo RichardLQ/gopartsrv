@@ -2,14 +2,13 @@ package wxpay
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"github.com/wechatpay-apiv3/wechatpay-go/core"
 	"github.com/wechatpay-apiv3/wechatpay-go/core/option"
 	"github.com/wechatpay-apiv3/wechatpay-go/services/payments/jsapi"
 	wxpay "github.com/wechatpay-apiv3/wechatpay-go/utils"
 	"gopartsrv/utils/mini"
 	"log"
-	"strconv"
-	"time"
 )
 
 
@@ -37,7 +36,7 @@ func createClient() (*core.Client,error) {
 func CreatOrder(openid string,amount int64) (*jsapi.PrepayWithRequestPaymentResponse,error) {
 	client,_:=createClient()
 	svc := jsapi.JsapiApiService{Client: client}
-	tradeNo := strconv.FormatInt(time.Now().Unix(),10)
+	tradeNo := uuid.NewString()[:18]
 	resp, _, err := svc.PrepayWithRequestPayment(context.Background(),
 		jsapi.PrepayRequest{
 			Appid:       core.String(mini.APPID),
