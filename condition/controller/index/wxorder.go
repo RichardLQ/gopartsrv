@@ -1,6 +1,7 @@
 package index
 
 import (
+	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gopartsrv/condition/logic/user"
@@ -43,6 +44,7 @@ func Order(c *gin.Context) {
 	}
 	fmt.Println(res)
 	fmt.Println(err)
+	wxpay.CallBack()
 	list, err := user.UserInfo(userid,openid)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"errs": err,"code":2002, "msg": "请求失败", "data": ""})
@@ -65,6 +67,11 @@ func Order(c *gin.Context) {
 	return
 }
 func OrderBack(c *gin.Context)  {
+	handler := wxpay.CallBack()
+	var content interface{}
+	handler.ParseNotifyRequest(context.Background(),c.Request,&content)
+	fmt.Println(content)
 	c.JSON(http.StatusOK, gin.H{"errs": 1, "msg": "请求成功", "data": 1})
 	return
 }
+
