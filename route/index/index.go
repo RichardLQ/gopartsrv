@@ -15,5 +15,6 @@ func IndexRouter(e *gin.Engine) {
 		v1.GET("/orderCallback", index.OrderBack)// 支付回调
 		v1.GET("/getOpenid", index.GetOpenid) //获取openid
 
+		v1.GET("/getRandomPic", index.GetRandomPic) //获取随机图片
 	}
 }
