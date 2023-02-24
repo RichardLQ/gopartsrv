@@ -2,7 +2,6 @@ package wxpay
 
 import (
 	"context"
-	"fmt"
 	"github.com/google/uuid"
 	"github.com/wechatpay-apiv3/wechatpay-go/core"
 	"github.com/wechatpay-apiv3/wechatpay-go/core/auth/verifiers"
