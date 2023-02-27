@@ -26,6 +26,8 @@ type Partlist struct {
 	Look       int     `json:"look"`
 	Hot        int     `json:"hot"`
 	Buy        bool    `json:"buy"`
+	Username string `json:"username"`
+	Img string `json:"img"`
 	Createtime string  `json:"createtime"` //创建时间
 	Updatetime string  `json:"updatetime"`
 	Deletetime string  `json:"deletetime"`
@@ -43,7 +45,7 @@ func (u *Partlist) Find(limit int, buy bool) (*[]Partlist, error) {
 	if u.Hot != 0 {
 		sqls = sqls.Where("hot = ?", u.Hot)
 	}
-	err := sqls.Select("*,? as buy", buy).Find(list).Error
+	err := sqls.Joins("left join users on users.id = partlist.uid").Select("*,? as buy,users.address as img", buy).Find(list).Error
 	if err != nil {
 		return &[]Partlist{}, err
 	}
