@@ -11,7 +11,7 @@ const (
 	TICKET_URL ="https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
 	SIGN_URL = "jsapi_ticket=%s&noncestr=%s&timestamp=%d&url=%s"
 	GRANT_TYPE = "authorization_code"
-	//心路历程
+	//龙猫小程序
 	APPID = "wxc055add4d2d04367"
 	SECRET = "2c315d992f26cbc89faeab0805b207ab"
 

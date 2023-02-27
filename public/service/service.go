@@ -14,7 +14,7 @@ func Serviceinit() {
 	//	log.Printf("endpoint %v %v %v %v\n", httpMethod, absolutePath, handlerName, nuHandlers)
 	//}
 	route.RouteInit(e)
-	e.Run(":8090")
+	e.Run(":8091")
 }
 
 //设置跨域

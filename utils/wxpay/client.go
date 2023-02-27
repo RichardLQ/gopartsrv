@@ -42,11 +42,11 @@ func CreatOrder(openid string,amount int64) (*jsapi.PrepayWithRequestPaymentResp
 	tradeNo := uuid.NewString()[:18]
 	resp, _, err := svc.PrepayWithRequestPayment(context.Background(),
 		jsapi.PrepayRequest{
-			Appid:       core.String(mini.APPID),
+			Appid:       core.String(mini.LMP_APPID),
 			Mchid:       core.String(mini.Mchid),
 			Description: core.String(mini.Description),
 			OutTradeNo:  core.String(tradeNo),
-			Attach:      core.String("龙猫小程序微信支付"),
+			Attach:      core.String("龙猫微信支付"),
 			NotifyUrl:   core.String(mini.ServerURL),
 			Amount: &jsapi.Amount{
 				Total: core.Int64(amount),
