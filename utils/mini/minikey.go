@@ -8,11 +8,16 @@ import (
 const (
 	MENU_URL = " https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s"
 	TOKEN_URL ="https://sz.api.weixin.qq.com/cgi-bin/token?grant_type=%s&appid=%s&secret=%s"
-
+	TICKET_URL ="https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
+	SIGN_URL = "jsapi_ticket=%s&noncestr=%s&timestamp=%d&url=%s"
 	GRANT_TYPE = "authorization_code"
 	//心路历程
 	APPID = "wxc055add4d2d04367"
 	SECRET = "2c315d992f26cbc89faeab0805b207ab"
+
+	//龙猫公众号
+	LMP_APPID="wxde2cf49d6527e57a"
+	LMP_SECRET = "b7ed63af9a651915a206ca832a2057e9"
 	//下单地址
 	ORDER_URL = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi"
 	MCHID = "1637163088"

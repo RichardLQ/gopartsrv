@@ -2,19 +2,33 @@ package index
 
 import (
 	"fmt"
+	"github.com/garyburd/redigo/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/gocolly/colly"
+	"gopartsrv/utils/db"
 	"math/rand"
 	"net/http"
 	"strings"
 	"time"
 )
 
+const (
+	CHE_NUM_KEY = "randomnumkey"
+	CHE_NUM_LIST = "randomlistkey"
+	)
+
 //GetRandomPic 获取图片
 func GetRandomPic(c *gin.Context)  {
 	urlList := getData()
+	redisCon := db.RedisPoolMap["work"].Get()
+	defer redisCon.Close()
+	num ,err :=redis.Int(redisCon.Do("GET",CHE_NUM_LIST))
+	fmt.Println(num)
+	fmt.Println(err)
+
 	url := urlList[getRandm(len(urlList))]
-	c.JSON(http.StatusOK, gin.H{"errs": 1, "msg": "请求成功", "data": url})
+	fmt.Println(url)
+	c.JSON(http.StatusOK, gin.H{"errs": 1, "msg": "请求成功", "data":urlList})
 	return
 }
 

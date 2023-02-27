@@ -49,7 +49,7 @@ max_open_conn = 200
 [redis.pro]
 [redis.pro.work]
 host = "127.0.0.1"
-port = "6379"
+port = "2000"
 connect_timeout = 2
 read_timeout = 1
 write_timeout = 1

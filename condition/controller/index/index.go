@@ -1,8 +1,12 @@
 package index
 
 import (
+	"crypto/sha1"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/tidwall/gjson"
 	"gopartsrv/condition/logic/index"
 	"gopartsrv/condition/model"
@@ -52,7 +56,11 @@ func Partlist(c *gin.Context) {
 
 func GetOpenid(c *gin.Context){
 	code := c.Query("code")
+	types := c.Query("type")
 	urls:=fmt.Sprintf(consts.OPENIDURL,mini.APPID,mini.SECRET,code,mini.GRANT_TYPE)
+	if types == "2"{
+		urls=fmt.Sprintf(consts.OPENIDURL,mini.LMP_APPID,mini.LMP_SECRET,code,mini.GRANT_TYPE)
+	}
 	respStr:= consts.HttpGet(urls)
 	if gjson.Get(respStr,"errcode").Int() != 0{
 		c.JSON(http.StatusOK, gin.H{"ret":gjson.Get(respStr,"errcode").Int(),"msg": gjson.Get(respStr,"errmsg").String(), "data": ""})
@@ -69,4 +77,105 @@ func GetOpenid(c *gin.Context){
 	}
 	c.JSON(http.StatusOK, gin.H{"ret":gjson.Get(respStr,"errcode").Int(),"msg": gjson.Get(respStr,"errmsg").String(), "data": gjson.Get(respStr,"openid").String()})
 	return
+}
+
+type tokens struct {
+	AccessToken string `json:"access_token"`
+	ExpireIn int64 `json:"expire_in"`
+}
+
+type tickets struct {
+	Ticket string `json:"ticket"`
+	ExpireIn int64 `json:"expire_in"`
+}
+
+func GetTokenTime(c *gin.Context)  {
+	types := c.Query("types")
+	if types == "token"{
+		token:=getToken()
+		c.JSON(http.StatusOK, gin.H{"ret":http.StatusOK,"msg": "请求成功", "token": token,"ticket":""})
+		return
+	}
+	token,ticket:=getTicket()
+	c.JSON(http.StatusOK, gin.H{"ret":http.StatusOK,"msg": "请求成功", "token": token,"ticket":ticket})
+	return
+}
+
+//获取accesstoken
+func getToken() string {
+	filePath := "./accesstoken.txt"
+	isExist,token := getTimes(filePath)
+	if isExist {
+		return token
+	}
+	grant_type := "client_credential"
+	appid := mini.LMP_APPID
+	secret := mini.LMP_SECRET
+	urls := fmt.Sprintf(mini.TOKEN_URL,grant_type,appid,secret)
+	str :=consts.HttpGet(urls)
+	content := tokens{
+		AccessToken: gjson.Get(str, "access_token").String(),
+		ExpireIn: time.Now().Unix(),
+	}
+	contents, _ := json.Marshal(content)
+	consts.WriteContent(filePath,string(contents))
+	return gjson.Get(str, "access_token").String()
+}
+
+//获取ticket
+func getTicket() (string,string) {
+	token :=getToken()
+	filePath := "./ticket.txt"
+	isExist,ticket := getTimes(filePath)
+	if isExist {
+		return token,ticket
+	}
+	urls := fmt.Sprintf(mini.TICKET_URL,token)
+	str :=consts.HttpGet(urls)
+	content := tickets{
+		Ticket: gjson.Get(str, "ticket").String(),
+		ExpireIn: time.Now().Unix(),
+	}
+	contents, _ := json.Marshal(content)
+	consts.WriteContent(filePath,string(contents))
+	return token,gjson.Get(str, "ticket").String()
+}
+
+func getTimes(filePath string) (bool,string) {
+	content,_:=consts.ReadContent(filePath)
+	times := gjson.Get(content,"expire_in").Int()
+	token := ""
+	isToken := gjson.Get(content,"access_token").Exists()
+	isTicket := gjson.Get(content,"ticket").Exists()
+	if isToken{
+		token = gjson.Get(content,"access_token").String()
+	}
+	if isTicket{
+		token = gjson.Get(content,"ticket").String()
+	}
+	bend := time.Now().Unix() - times
+	if bend < 7200 {
+		return true ,token
+	}
+	return false,""
+}
+
+//Sign 加密信息
+func Sign(c *gin.Context)  {
+	url:=c.Query("url")
+	tradeNo := uuid.NewString()[:18]
+	_,ticket:= getTicket()
+	timestamp := time.Now().Unix()
+	urls := fmt.Sprintf(mini.SIGN_URL,ticket,tradeNo,timestamp,url)
+	sign := Sha1String(urls)
+	c.JSON(http.StatusOK, gin.H{"ret":http.StatusOK,"msg": "请求成功", "sign": sign,
+		"timestamp":timestamp,"nonceStr":tradeNo,"appId":mini.LMP_APPID})
+	return
+}
+
+//sha1加密
+func Sha1String( data string) string {
+	sha1 := sha1.New()
+	sha1.Write([]byte(data))
+	return hex.EncodeToString(sha1.Sum([]byte(nil)))
 }
