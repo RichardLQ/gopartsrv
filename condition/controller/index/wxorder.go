@@ -44,7 +44,7 @@ func Order(c *gin.Context) {
 	}
 	fmt.Println(res)
 	fmt.Println(err)
-	wxpay.CallBack()
+	//wxpay.CallBack()
 	list, err := user.UserInfo(userid,openid)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"errs": err,"code":2002, "msg": "请求失败", "data": ""})

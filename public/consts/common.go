@@ -6,4 +6,5 @@ const (
 	PICAPI = "https://api.ixiaowai.cn/api/api.php?return=json" //图片接口
 	PICAPIBAK = "https://acg.yanwz.cn/wallpaper/api.php" //图片接口
 	OPENIDURL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=%s" //openid获取链接
+	P_OPENIDURL = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=%s"//公众号获取openid
 )

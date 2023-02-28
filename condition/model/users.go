@@ -44,7 +44,7 @@ func (u *Users) Find() (*Users, error) {
 		sqls = sqls.Where("openid = ?", u.Openid)
 	}
 	err := sqls.Find(list).Error
-	if err != nil {
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return &Users{}, err
 	}
 	return list, nil

@@ -59,8 +59,9 @@ func GetOpenid(c *gin.Context){
 	types := c.Query("type")
 	urls:=fmt.Sprintf(consts.OPENIDURL,mini.APPID,mini.SECRET,code,mini.GRANT_TYPE)
 	if types == "2"{
-		urls=fmt.Sprintf(consts.OPENIDURL,mini.LMP_APPID,mini.LMP_SECRET,code,mini.GRANT_TYPE)
+		urls=fmt.Sprintf(consts.P_OPENIDURL,mini.LMP_APPID,mini.LMP_SECRET,code,mini.GRANT_TYPE)
 	}
+	fmt.Println(urls)
 	respStr:= consts.HttpGet(urls)
 	if gjson.Get(respStr,"errcode").Int() != 0{
 		c.JSON(http.StatusOK, gin.H{"ret":gjson.Get(respStr,"errcode").Int(),"msg": gjson.Get(respStr,"errmsg").String(), "data": ""})
