@@ -6,7 +6,7 @@ import (
 )
 
 //Hotlist 热门列表
-func Hotlist(userId,openid string,hot int) (*[]model.Partlist,error) {
+func Hotlist(userId int64,openid string,hot int) (*[]model.Partlist,error) {
 	order:=model.Order{
 		Id: userId,
 		Openid: openid,
@@ -29,7 +29,7 @@ func Hotlist(userId,openid string,hot int) (*[]model.Partlist,error) {
 	return list,nil
 }
 
-func Partlist(userId,openid,search,city,area string,page,pageSize int)(*[]model.Partlist,error)  {
+func Partlist(userId int64,openid,search,city,area string,page,pageSize int)(*[]model.Partlist,error)  {
 	order:=model.Order{
 		Id: userId,
 		Openid: openid,

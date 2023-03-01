@@ -2,7 +2,9 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
+	"gopartsrv/public/consts"
 	"gopartsrv/utils/db"
+	"time"
 )
 
 var (
@@ -26,6 +28,7 @@ type Users struct {
 	Desc       string `json:"desc"`
 	Updatetime string `json:"updatetime"`
 	Createtime string `json:"createtime"`
+	Cuttime string `json:"cuttime"`
 }
 
 //获取表名
@@ -82,4 +85,32 @@ func (u *Users) Updates() (int, error) {
 		return 0, err
 	}
 	return 1, nil
+}
+
+func (u *Users) UpdateVip(types string) error {
+	cutTime := getVipTime(types)
+	err:=dbs.Table(u.TableName()).Where("openid = ?",u.Id).
+		Updates(&Users{
+			Updatetime: time.Now().Format(consts.FORMATDATELONG),
+			Cuttime: cutTime,
+	}).Error
+	if err != nil{
+		return err
+	}
+	return nil
+}
+
+func getVipTime(types string ) string {
+	var ss int64
+	switch types {
+		case "0"://月
+		ss = 86400*30
+		case "1"://季度
+		ss = 86400*30*3
+	 	case "2"://年
+		ss = 86400*365
+	}
+	ti := time.Now().Unix() + ss
+	tm := time.Unix(ti,0)
+	return tm.Format(consts.FORMATDATELONG)
 }

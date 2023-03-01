@@ -28,7 +28,7 @@ func GetRandomPic(c *gin.Context)  {
 
 	url := urlList[getRandm(len(urlList))]
 	fmt.Println(url)
-	c.JSON(http.StatusOK, gin.H{"errs": 1, "msg": "请求成功", "data":urlList})
+	c.JSON(http.StatusOK, gin.H{"errs": 1, "msg": "请求成功", "data":url})
 	return
 }
 

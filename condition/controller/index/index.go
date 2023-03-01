@@ -19,8 +19,9 @@ import (
 //Hotlist 热门列表
 func Hotlist(c *gin.Context) {
 	userId,_ := c.GetPostForm("userid")
+	userIds, err := strconv.ParseInt(userId, 10, 64)
 	openid,_  := c.GetPostForm("openid")
-	list,err:=index.Hotlist(userId,openid,2)
+	list,err:=index.Hotlist(userIds,openid,2)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"errs": err, "msg": "请求失败", "data":list})
 		return
@@ -41,10 +42,8 @@ func Partlist(c *gin.Context) {
 	search := c.PostForm("search")
 	city := c.PostForm("city")
 	area := c.PostForm("area")
-	fmt.Println(city)
-	fmt.Println(area)
-	fmt.Println(search)
-	list,err:=index.Partlist(userId,openid,search,city,area,page,pageSize)
+	userIds, err := strconv.ParseInt(userId, 10, 64)
+	list,err:=index.Partlist(userIds,openid,search,city,area,page,pageSize)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"errs": err, "msg": "请求失败", "data":list})
 		return
@@ -155,7 +154,7 @@ func getTimes(filePath string) (bool,string) {
 		token = gjson.Get(content,"ticket").String()
 	}
 	bend := time.Now().Unix() - times
-	if bend < 7200 {
+	if bend < 7100 {
 		return true ,token
 	}
 	return false,""
@@ -164,13 +163,18 @@ func getTimes(filePath string) (bool,string) {
 //Sign 加密信息
 func Sign(c *gin.Context)  {
 	url:=c.Query("url")
-	tradeNo := uuid.NewString()[:18]
+	nonceStr := uuid.NewString()[:18]
 	_,ticket:= getTicket()
 	timestamp := time.Now().Unix()
-	urls := fmt.Sprintf(mini.SIGN_URL,ticket,tradeNo,timestamp,url)
+	urls := fmt.Sprintf(mini.SIGN_URL,ticket,nonceStr,timestamp,url)
 	sign := Sha1String(urls)
-	c.JSON(http.StatusOK, gin.H{"ret":http.StatusOK,"msg": "请求成功", "sign": sign,
-		"timestamp":timestamp,"nonceStr":tradeNo,"appId":mini.LMP_APPID})
+	data := map[string]interface{}{
+		"sign": sign,
+		"timestamp":timestamp,
+		"nonceStr":nonceStr,
+		"appId":mini.LMP_APPID,
+	}
+	c.JSON(http.StatusOK, gin.H{"ret":http.StatusOK,"msg": "请求成功", "data": data})
 	return
 }
 

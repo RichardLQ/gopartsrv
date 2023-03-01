@@ -10,13 +10,15 @@ import (
 	"github.com/wechatpay-apiv3/wechatpay-go/core/option"
 	"github.com/wechatpay-apiv3/wechatpay-go/services/payments/jsapi"
 	wxpay "github.com/wechatpay-apiv3/wechatpay-go/utils"
+	"gopartsrv/condition/model"
+	"gopartsrv/public/consts"
 	"gopartsrv/utils/mini"
 	"log"
+	"time"
 )
 
-
 //创建支付服务
-func createClient() (*core.Client,error) {
+func createClient() (*core.Client, error) {
 	// 使用 utils 提供的函数从本地文件中加载商户私钥，商户私钥会用来生成请求的签名
 	mchPrivateKey, err := wxpay.LoadPrivateKeyWithPath(mini.MchPKFileName)
 	if err != nil {
@@ -32,17 +34,17 @@ func createClient() (*core.Client,error) {
 	if err != nil {
 		log.Fatalf("new wechat pay client err:%s", err)
 	}
-	return client,nil
+	return client, nil
 }
 
 //下单
-func CreatOrder(openid string,amount int64) (*jsapi.PrepayWithRequestPaymentResponse,error) {
-	client,_:=createClient()
+func CreatOrder(openid, appid string, amount int64, userid int) (*jsapi.PrepayWithRequestPaymentResponse,int64, error) {
+	client, _ := createClient()
 	svc := jsapi.JsapiApiService{Client: client}
 	tradeNo := uuid.NewString()[:18]
 	resp, _, err := svc.PrepayWithRequestPayment(context.Background(),
 		jsapi.PrepayRequest{
-			Appid:       core.String(mini.LMP_APPID),
+			Appid:       core.String(appid),
 			Mchid:       core.String(mini.Mchid),
 			Description: core.String(mini.Description),
 			OutTradeNo:  core.String(tradeNo),
@@ -57,9 +59,18 @@ func CreatOrder(openid string,amount int64) (*jsapi.PrepayWithRequestPaymentResp
 		},
 	)
 	if err != nil {
-		return resp,err
+		return resp,0, err
 	}
-	return resp ,nil
+	order := model.Order{
+		Openid:     openid,
+		Tradeno:    tradeNo,
+		Userid:     userid,
+		Amount:     amount,
+		Createtime: time.Now().Format(consts.FORMATDATELONG),
+		Updatetime: time.Now().Format(consts.FORMATDATELONG),
+	}
+	rid, _ := order.Create()
+	return resp,rid, nil
 }
 
 type WXPayNotify struct {
@@ -92,7 +103,7 @@ type WXPayNotify struct {
 }
 
 //回调
-func CallBack() *notify.Handler{
+func CallBack() *notify.Handler {
 	mchPrivateKey, err := wxpay.LoadPrivateKeyWithPath(mini.MchPKFileName)
 	if err != nil {
 		log.Fatal("load merchant private key error")

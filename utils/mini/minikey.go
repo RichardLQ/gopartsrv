@@ -32,9 +32,9 @@ const (
 	Mchid                      = "1637163088"                                // 商户号
 	MchCertificateSerialNumber = "4F59EB541378CC84423AE305A596041C776967A1"  // 商户证书序列号
 	MchAPIv3Key                = "mADUjnHmfgTtqFk1rPvZJtBcmcqQ6C09"          // 商户APIv3密钥
-	//MchPKFileName			 = "/usr/local/nginx/ssl/apiclient_key.pem"         // 下载的证书文件
+	MchPKFileName			 = "/usr/local/nginx/ssl/apiclient_key.pem"         // 下载的证书文件
 	//MchPKFileName			 = "D:/data/conf/apiclient_key.pem"         // 下载的证书文件
-	MchPKFileName			 = "G:/data/apiclient_key.pem"         // 下载的证书文件
+	//MchPKFileName			 = "G:/data/apiclient_key.pem"         // 下载的证书文件
 	ServerURL				 = "https://www.sourcandy.cn/part/index/orderCallback"         // 回调地址
 	Description    			 =  "龙猫社群 深圳圈"
 )
