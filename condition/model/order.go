@@ -77,6 +77,7 @@ func (u *Order) Update(types string) error {
 	err := dbs.Table(u.TableName()).Where("tradeno = ?",u.Tradeno).
 		Updates(Order{
 			Openid: u.Openid,
+			Status: u.Status,
 			Transactionid:u.Transactionid,
 			Updatetime: u.Updatetime,
 	}).Error
@@ -86,11 +87,12 @@ func (u *Order) Update(types string) error {
 	if u.Status == 2 {
 		list,err := u.FindOne()
 		if err!= nil {
-			user:=&Users{
-				Openid: list.Openid,
-			}
-			user.UpdateVip(types)
+			return err
 		}
+		user:=&Users{
+			Openid: list.Openid,
+		}
+		user.UpdateVip(types)
 	}
 	return nil
 }

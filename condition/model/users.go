@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"gopartsrv/public/consts"
 	"gopartsrv/utils/db"
@@ -88,8 +89,10 @@ func (u *Users) Updates() (int, error) {
 }
 
 func (u *Users) UpdateVip(types string) error {
-	cutTime := getVipTime(types)
-	err:=dbs.Table(u.TableName()).Where("openid = ?",u.Id).
+	cutTime := getVipTime(u,types)
+	fmt.Println(u)
+	fmt.Println(cutTime)
+	err:=dbs.Table(u.TableName()).Where("openid = ?",u.Openid).
 		Updates(&Users{
 			Updatetime: time.Now().Format(consts.FORMATDATELONG),
 			Cuttime: cutTime,
@@ -100,7 +103,15 @@ func (u *Users) UpdateVip(types string) error {
 	return nil
 }
 
-func getVipTime(types string ) string {
+func getVipTime(u *Users,types string ) string {
+	list,_:=u.Find()
+	now := time.Now().Unix()
+	if list.Cuttime != "" {
+		ti,_:=time.Parse(consts.FORMATDATELONG,list.Cuttime)
+		if ti.Unix() >= now {
+			now = ti.Unix()
+		}
+	}
 	var ss int64
 	switch types {
 		case "0"://月
@@ -110,7 +121,7 @@ func getVipTime(types string ) string {
 	 	case "2"://年
 		ss = 86400*365
 	}
-	ti := time.Now().Unix() + ss
+	ti := now + ss
 	tm := time.Unix(ti,0)
 	return tm.Format(consts.FORMATDATELONG)
 }

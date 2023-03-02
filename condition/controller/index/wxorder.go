@@ -79,12 +79,12 @@ func OrderBack(c *gin.Context) {
 	handler := wxpay.CallBack()
 	var content interface{}
 	handler.ParseNotifyRequest(context.Background(), c.Request, &content)
-	status := content.(map[string]interface{})["payer"].(map[string]interface{})["trade_state"]
 	openid := content.(map[string]interface{})["payer"].(map[string]interface{})["openid"].(string)
 	total := content.(map[string]interface{})["amount"].(map[string]interface{})["total"].(float64)
 	out_trade_no := content.(map[string]interface{})["out_trade_no"].(string)
 	transaction_id := content.(map[string]interface{})["transaction_id"].(string)
 	success_time := content.(map[string]interface{})["success_time"].(string)
+	status := content.(map[string]interface{})["trade_state"].(string)
 	ts, _ := time.Parse(time.RFC3339, success_time)
 	types := "0"
 	if 1000< total && total<= 10000 {
@@ -93,11 +93,17 @@ func OrderBack(c *gin.Context) {
 	if 10000< total && total<= 100000 {
 		types = "2"
 	}
+	//openid := "oBzet53gPZSisPu4XgCWNCn8pm68"
+	//out_trade_no := "d3500d4f-7bfb-499b"
+	//transaction_id := "4200001756202303021462235849"
+	//status:= "SUCCESS"
+	//types := "0"
 	order:= model.Order{
 		Openid: openid,
 		Tradeno: out_trade_no,
 		Status: 1,
 		Transactionid: transaction_id,
+		//Updatetime: "2023-03-02 12:10:41",
 		Updatetime: ts.Format(consts.FORMATDATELONG),
 	}
 	if status == "SUCCESS" {
