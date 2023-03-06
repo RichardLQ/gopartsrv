@@ -54,7 +54,7 @@ func (u *Partlist) Find(limit int, buy bool) (*[]Partlist, error) {
 
 func (u *Partlist) Find2Search(page,pageSize int,buy bool) (*[]Partlist, error) {
 	list := &[]Partlist{}
-	sqls := dbs.Debug().Table(u.TableName())
+	sqls := dbs.Table(u.TableName())
 	if u.Hot != 0 {
 		sqls = sqls.Where("hot = ?", u.Hot)
 	}
