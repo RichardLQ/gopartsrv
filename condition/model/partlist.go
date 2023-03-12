@@ -12,6 +12,7 @@ func init() {
 // Partlist 订单
 type Partlist struct {
 	Id         string  `json:"id"` //banner的id
+	Openid string `json:"openid"`
 	Uid        string  `json:"uid"`
 	Status     int     `json:"status"`
 	Title      string  `json:"title"`
@@ -28,6 +29,26 @@ type Partlist struct {
 	Buy        bool    `json:"buy"`
 	Username string `json:"username"`
 	Img string `json:"img"`
+	Createtime string  `json:"createtime"` //创建时间
+	Updatetime string  `json:"updatetime"`
+	Deletetime string  `json:"deletetime"`
+}
+type PartlistAdd struct {
+	Id         string  `json:"id"` //banner的id
+	Openid string `json:"openid"`
+	Uid        string  `json:"uid"`
+	Status     int     `json:"status"`
+	Title      string  `json:"title"`
+	Content    string  `json:"content"`
+	Tag        string  `json:"tag"`
+	Price      float64 `json:"price"`
+	Unit       string  `json:"unit"`
+	Province   string  `json:"province"`
+	City       string  `json:"city"`
+	Area       string  `json:"area"`
+	Address    string  `json:"address"`
+	Look       int     `json:"look"`
+	Hot        int     `json:"hot"`
 	Createtime string  `json:"createtime"` //创建时间
 	Updatetime string  `json:"updatetime"`
 	Deletetime string  `json:"deletetime"`
@@ -74,4 +95,29 @@ func (u *Partlist) Find2Search(page,pageSize int,buy bool) (*[]Partlist, error) 
 		return &[]Partlist{}, err
 	}
 	return list, nil
+}
+
+func (u *Partlist)Add() error {
+	err := dbs.Table(u.TableName()).Create(&PartlistAdd{
+		Uid: u.Uid,
+		Status: u.Status,
+		Title: u.Title,
+		Content: u.Content,
+		Tag: u.Tag,
+		Price: u.Price,
+		Unit: u.Unit,
+		Province: u.Province,
+		City: u.City,
+		Area: u.Area,
+		Address: u.Address,
+		Look: u.Look,
+		Hot: u.Hot,
+		Createtime: u.Createtime,
+		Updatetime: u.Updatetime,
+		Deletetime: u.Deletetime,
+	}).Error
+	if err != nil {
+		return  err
+	}
+	return  nil
 }

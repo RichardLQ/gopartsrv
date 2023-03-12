@@ -51,6 +51,38 @@ func Partlist(c *gin.Context) {
 	return
 }
 
+//添加
+func AddPartlist(c *gin.Context)  {
+	status, err := strconv.Atoi(c.PostForm("status"))
+	look, err := strconv.Atoi(c.PostForm("look"))
+	hot, err := strconv.Atoi(c.PostForm("hot"))
+	price, err := strconv.ParseFloat(c.PostForm("price"),64)
+	part:= model.Partlist{
+		Uid: c.PostForm("uid"),
+		Openid:c.PostForm("openid"),
+		Status: status,
+		Title: c.PostForm("title"),
+		Content: c.PostForm("content"),
+		Tag: c.PostForm("tag"),
+		Price: price,
+		Unit: c.PostForm("unit"),
+		Province: c.PostForm("province"),
+		City: c.PostForm("city"),
+		Area: c.PostForm("area"),
+		Look: look,
+		Hot: hot,
+		Createtime: time.Now().Format(consts.FORMATDATELONG),
+		Updatetime: time.Now().Format(consts.FORMATDATELONG),
+	}
+	err = part.Add()
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"errs": err, "msg": "请求失败", "data":""})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"errs": "", "msg": "请求成功", "data":""})
+	return
+}
+
 
 func GetOpenid(c *gin.Context){
 	code := c.Query("code")
