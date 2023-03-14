@@ -66,6 +66,9 @@ func (u *Partlist) Find(limit int, buy bool) (*[]Partlist, error) {
 	if u.Hot != 0 {
 		sqls = sqls.Where("hot = ?", u.Hot)
 	}
+	if limit != 0 {
+		sqls = sqls.Limit(limit)
+	}
 	err := sqls.Joins("left join users on users.id = partlist.uid").Select("*,? as buy,users.address as img", buy).Find(list).Error
 	if err != nil {
 		return &[]Partlist{}, err

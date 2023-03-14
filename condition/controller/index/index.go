@@ -19,9 +19,8 @@ import (
 //Hotlist 热门列表
 func Hotlist(c *gin.Context) {
 	userId,_ := c.GetPostForm("userid")
-	userIds, err := strconv.ParseInt(userId, 10, 64)
 	openid,_  := c.GetPostForm("openid")
-	list,err:=index.Hotlist(userIds,openid,2)
+	list,err:=index.Hotlist(userId,openid,2)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"errs": err, "msg": "请求失败", "data":list})
 		return
@@ -57,6 +56,10 @@ func AddPartlist(c *gin.Context)  {
 	look, err := strconv.Atoi(c.PostForm("look"))
 	hot, err := strconv.Atoi(c.PostForm("hot"))
 	price, err := strconv.ParseFloat(c.PostForm("price"),64)
+	if c.PostForm("openid") == "" {
+		c.JSON(http.StatusOK, gin.H{"errs": err,"code":202, "msg": "请先登录", "data":""})
+		return
+	}
 	part:= model.Partlist{
 		Uid: c.PostForm("uid"),
 		Openid:c.PostForm("openid"),
@@ -76,10 +79,10 @@ func AddPartlist(c *gin.Context)  {
 	}
 	err = part.Add()
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"errs": err, "msg": "请求失败", "data":""})
+		c.JSON(http.StatusOK, gin.H{"errs": err,"code":201, "msg": "请求失败", "data":""})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"errs": "", "msg": "请求成功", "data":""})
+	c.JSON(http.StatusOK, gin.H{"errs": "","code":200, "msg": "请求成功", "data":""})
 	return
 }
 

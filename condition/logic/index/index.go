@@ -8,23 +8,25 @@ import (
 )
 
 //Hotlist 热门列表
-func Hotlist(userId int64,openid string,hot int) (*[]model.Partlist,error) {
-	order:=model.Order{
+func Hotlist(userId ,openid string,hot int) (*[]model.Partlist,error) {
+	user:=model.Users{
 		Id: userId,
 		Openid: openid,
 	}
-	orders,err:=order.Find()
+	users,err:=user.Find()
 	if err != nil {
-		return &[]model.Partlist{} ,fmt.Errorf("查询订单失败:%v",err)
+		return &[]model.Partlist{} ,fmt.Errorf("查询用户失败:%v",err)
 	}
 	part := model.Partlist{
 		Hot: hot,
 	}
 	buy := false
-	if len(*orders)>0 {
+	local, _ := time.LoadLocation("Local")
+	locationDatetime, _ := time.ParseInLocation(consts.FORMATDATELONG, users.Cuttime, local)
+	if locationDatetime.Unix() >= time.Now().Unix() {
 		buy = true
 	}
-	list,_ := part.Find(10,buy)
+	list,_ := part.Find(5,buy)
 	if err != nil {
 		return list ,fmt.Errorf("查询热门列表失败:%v",err)
 	}
