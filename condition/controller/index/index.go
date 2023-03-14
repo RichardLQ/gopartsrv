@@ -52,7 +52,6 @@ func Partlist(c *gin.Context) {
 
 //添加
 func AddPartlist(c *gin.Context)  {
-	status, err := strconv.Atoi(c.PostForm("status"))
 	look, err := strconv.Atoi(c.PostForm("look"))
 	hot, err := strconv.Atoi(c.PostForm("hot"))
 	price, err := strconv.ParseFloat(c.PostForm("price"),64)
@@ -63,7 +62,7 @@ func AddPartlist(c *gin.Context)  {
 	part:= model.Partlist{
 		Uid: c.PostForm("uid"),
 		Openid:c.PostForm("openid"),
-		Status: status,
+		Status: 3,
 		Title: c.PostForm("title"),
 		Content: c.PostForm("content"),
 		Tag: c.PostForm("tag"),

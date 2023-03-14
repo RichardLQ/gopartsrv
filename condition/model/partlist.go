@@ -69,7 +69,8 @@ func (u *Partlist) Find(limit int, buy bool) (*[]Partlist, error) {
 	if limit != 0 {
 		sqls = sqls.Limit(limit)
 	}
-	err := sqls.Joins("left join users on users.id = partlist.uid").Select("*,? as buy,users.address as img", buy).Find(list).Error
+	//err := sqls.Joins("left join users on users.id = partlist.uid").Select("*,? as buy,users.address as img", buy).Find(list).Error
+	err := sqls.Find(list).Error
 	if err != nil {
 		return &[]Partlist{}, err
 	}
@@ -91,9 +92,10 @@ func (u *Partlist) Find2Search(page,pageSize int,buy bool) (*[]Partlist, error) 
 	if u.Content != "" {
 		sqls = sqls.Where("content like ?", "%"+u.Content+"%")
 	}
-	err := sqls.Joins("left join users on users.id = partlist.uid").
-		Select("*,? as buy,users.address as img", buy).Limit(pageSize).
-		Offset((page - 1) * pageSize).Find(list).Error
+	//err := sqls.Joins("left join users on users.id = partlist.uid").
+	//	Select("*,? as buy,users.address as img", buy).Limit(pageSize).
+	//	Offset((page - 1) * pageSize).Find(list).Error
+	err := sqls.Offset((page - 1) * pageSize).Find(list).Error
 	if err != nil {
 		return &[]Partlist{}, err
 	}

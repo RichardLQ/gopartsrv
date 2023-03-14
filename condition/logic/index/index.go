@@ -27,6 +27,11 @@ func Hotlist(userId ,openid string,hot int) (*[]model.Partlist,error) {
 		buy = true
 	}
 	list,_ := part.Find(5,buy)
+	for i, item := range *list {
+		item.Buy = buy
+		item.Img = users.Address
+		(*list)[i] = item
+	}
 	if err != nil {
 		return list ,fmt.Errorf("查询热门列表失败:%v",err)
 	}
@@ -48,14 +53,17 @@ func Partlist(userId,openid,search,city,area string,page,pageSize int)(*[]model.
 		Content: search,
 	}
 	buy := false
-	fmt.Println(users)
 	local, _ := time.LoadLocation("Local")
 	locationDatetime, _ := time.ParseInLocation(consts.FORMATDATELONG, users.Cuttime, local)
 	if locationDatetime.Unix() >= time.Now().Unix() {
 		buy = true
 	}
-	fmt.Println(buy)
 	list,_ := part.Find2Search(page,pageSize,buy)
+	for i, item := range *list {
+		item.Buy = buy
+		item.Img = users.Address
+		(*list)[i] = item
+	}
 	if err != nil {
 		return list ,fmt.Errorf("查询热门列表失败:%v",err)
 	}
