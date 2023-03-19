@@ -51,6 +51,7 @@ func Partlist(userId,openid,search,city,area string,page,pageSize int)(*[]model.
 		City: city,
 		Area: area,
 		Content: search,
+		Status: 1,
 	}
 	buy := false
 	local, _ := time.LoadLocation("Local")

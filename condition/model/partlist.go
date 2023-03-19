@@ -12,7 +12,7 @@ func init() {
 // Partlist 订单
 type Partlist struct {
 	Id         string  `json:"id"` //banner的id
-	Openid string `json:"openid"`
+	Openid     string  `json:"openid"`
 	Uid        string  `json:"uid"`
 	Status     int     `json:"status"`
 	Title      string  `json:"title"`
@@ -27,15 +27,16 @@ type Partlist struct {
 	Look       int     `json:"look"`
 	Hot        int     `json:"hot"`
 	Buy        bool    `json:"buy"`
-	Username string `json:"username"`
-	Img string `json:"img"`
+	Tele       string  `json:"tele"`
+	Username   string  `json:"username"`
+	Img        string  `json:"img"`
 	Createtime string  `json:"createtime"` //创建时间
 	Updatetime string  `json:"updatetime"`
 	Deletetime string  `json:"deletetime"`
 }
 type PartlistAdd struct {
 	Id         string  `json:"id"` //banner的id
-	Openid string `json:"openid"`
+	Openid     string  `json:"openid"`
 	Uid        string  `json:"uid"`
 	Status     int     `json:"status"`
 	Title      string  `json:"title"`
@@ -49,6 +50,7 @@ type PartlistAdd struct {
 	Address    string  `json:"address"`
 	Look       int     `json:"look"`
 	Hot        int     `json:"hot"`
+	Tele       string  `json:"tele"`
 	Createtime string  `json:"createtime"` //创建时间
 	Updatetime string  `json:"updatetime"`
 	Deletetime string  `json:"deletetime"`
@@ -77,7 +79,7 @@ func (u *Partlist) Find(limit int, buy bool) (*[]Partlist, error) {
 	return list, nil
 }
 
-func (u *Partlist) Find2Search(page,pageSize int,buy bool) (*[]Partlist, error) {
+func (u *Partlist) Find2Search(page, pageSize int, buy bool) (*[]Partlist, error) {
 	list := &[]Partlist{}
 	sqls := dbs.Table(u.TableName())
 	if u.Hot != 0 {
@@ -92,37 +94,40 @@ func (u *Partlist) Find2Search(page,pageSize int,buy bool) (*[]Partlist, error) 
 	if u.Content != "" {
 		sqls = sqls.Where("content like ?", "%"+u.Content+"%")
 	}
+	if u.Status != 0 {
+		sqls = sqls.Where("`status` = ?", u.Status)
+	}
 	//err := sqls.Joins("left join users on users.id = partlist.uid").
 	//	Select("*,? as buy,users.address as img", buy).Limit(pageSize).
 	//	Offset((page - 1) * pageSize).Find(list).Error
-	err := sqls.Offset((page - 1) * pageSize).Find(list).Error
+	err := sqls.Limit(pageSize).Offset((page - 1) * pageSize).Find(list).Error
 	if err != nil {
 		return &[]Partlist{}, err
 	}
 	return list, nil
 }
 
-func (u *Partlist)Add() error {
+func (u *Partlist) Add() error {
 	err := dbs.Table(u.TableName()).Create(&PartlistAdd{
-		Uid: u.Uid,
-		Status: u.Status,
-		Title: u.Title,
-		Content: u.Content,
-		Tag: u.Tag,
-		Price: u.Price,
-		Unit: u.Unit,
-		Province: u.Province,
-		City: u.City,
-		Area: u.Area,
-		Address: u.Address,
-		Look: u.Look,
-		Hot: u.Hot,
+		Uid:        u.Uid,
+		Status:     u.Status,
+		Title:      u.Title,
+		Content:    u.Content,
+		Tag:        u.Tag,
+		Price:      u.Price,
+		Unit:       u.Unit,
+		Province:   u.Province,
+		City:       u.City,
+		Area:       u.Area,
+		Address:    u.Address,
+		Look:       u.Look,
+		Hot:        u.Hot,
 		Createtime: u.Createtime,
 		Updatetime: u.Updatetime,
 		Deletetime: u.Deletetime,
 	}).Error
 	if err != nil {
-		return  err
+		return err
 	}
-	return  nil
+	return nil
 }
