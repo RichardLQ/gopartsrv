@@ -55,7 +55,8 @@ func AddPartlist(c *gin.Context)  {
 	look, err := strconv.Atoi(c.PostForm("look"))
 	hot, err := strconv.Atoi(c.PostForm("hot"))
 	price, err := strconv.ParseFloat(c.PostForm("price"),64)
-	if c.PostForm("openid") == "" {
+	if c.PostForm("openid") == "" || c.PostForm("title") == ""  ||
+		c.PostForm("content") == "" || c.PostForm("tele")==""{
 		c.JSON(http.StatusOK, gin.H{"errs": err,"code":202, "msg": "请先登录", "data":""})
 		return
 	}
@@ -71,6 +72,7 @@ func AddPartlist(c *gin.Context)  {
 		Province: c.PostForm("province"),
 		City: c.PostForm("city"),
 		Area: c.PostForm("area"),
+		Tele: c.PostForm("tele"),
 		Look: look,
 		Hot: hot,
 		Createtime: time.Now().Format(consts.FORMATDATELONG),
