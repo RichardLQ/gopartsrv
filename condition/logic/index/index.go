@@ -70,3 +70,21 @@ func Partlist(userId,openid,search,city,area string,page,pageSize int)(*[]model.
 	}
 	return list,nil
 }
+
+func IsBuy(openid,userId string) bool {
+	buy := false
+	user:=model.Users{
+		Id: userId,
+		Openid: openid,
+	}
+	users,err:=user.Find()
+	if err != nil {
+		return buy
+	}
+	local, _ := time.LoadLocation("Local")
+	locationDatetime, _ := time.ParseInLocation(consts.FORMATDATELONG, users.Cuttime, local)
+	if locationDatetime.Unix() >= time.Now().Unix() {
+		buy = true
+	}
+	return buy
+}

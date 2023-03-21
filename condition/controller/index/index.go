@@ -86,7 +86,18 @@ func AddPartlist(c *gin.Context)  {
 	c.JSON(http.StatusOK, gin.H{"errs": "","code":200, "msg": "请求成功", "data":""})
 	return
 }
-
+//IsBuy 是否购买
+func IsBuy(c *gin.Context)  {
+	openid :=c.Query("openid")
+	userid :=c.Query("userid")
+	if openid == ""{
+		c.JSON(http.StatusOK, gin.H{"errs": "openid缺失","code":200,"buy":false, "msg": "openid缺失"})
+		return
+	}
+	buy:=index.IsBuy(openid,userid)
+	c.JSON(http.StatusOK, gin.H{"errs": "请求成功","code":200,"buy":buy, "msg": "请求成功"})
+	return
+}
 
 func GetOpenid(c *gin.Context){
 	code := c.Query("code")
