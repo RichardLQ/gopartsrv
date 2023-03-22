@@ -18,7 +18,7 @@ func IndexRouter(e *gin.Engine) {
 		v1.GET("/getOpenid", index.GetOpenid) //获取openid
 		v1.GET("/getToken", index.GetTokenTime) //获取accesstoken或者ticket
 		v1.GET("/getSign", index.Sign) //获取加密信息
-		v1.GET("/uploads", index.UploadImage) //上传图片
+		v1.POST("/uploads", index.UploadImage) //上传图片
 
 
 
