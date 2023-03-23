@@ -20,8 +20,6 @@ func IndexRouter(e *gin.Engine) {
 		v1.GET("/getSign", index.Sign) //获取加密信息
 		v1.POST("/uploads", index.UploadImage) //上传图片
 
-
-
 		v1.GET("/getRandomPic", index.GetRandomPic) //获取随机图片
 		v1.POST("/orderCallback", index.OrderBack)// 支付回调
 	}
