@@ -28,6 +28,7 @@ type Partlist struct {
 	Hot        int     `json:"hot"`
 	Buy        bool    `json:"buy"`
 	Tele       string  `json:"tele"`
+	Images     string  `json:"images"`
 	Username   string  `json:"username"`
 	Img        string  `json:"img"`
 	Createtime string  `json:"createtime"` //创建时间

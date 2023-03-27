@@ -21,6 +21,8 @@ func IndexRouter(e *gin.Engine) {
 		v1.POST("/uploads", index.UploadImage) //上传图片
 
 		v1.GET("/getRandomPic", index.GetRandomPic) //获取随机图片
+
+		v1.GET("/getRandomCosplay", index.GetRandomCosplay) //获取随机图片
 		v1.POST("/orderCallback", index.OrderBack)// 支付回调
 	}
 }

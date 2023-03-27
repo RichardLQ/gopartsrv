@@ -74,6 +74,7 @@ func AddPartlist(c *gin.Context)  {
 		City: c.PostForm("city"),
 		Area: c.PostForm("area"),
 		Tele: c.PostForm("tele"),
+		Images: c.PostForm("images"),
 		Look: look,
 		Hot: hot,
 		Createtime: time.Now().Format(consts.FORMATDATELONG),
