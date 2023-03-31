@@ -47,6 +47,7 @@ type PartlistAdd struct {
 	Unit       string  `json:"unit"`
 	Province   string  `json:"province"`
 	City       string  `json:"city"`
+	Images     string  `json:"images"`
 	Area       string  `json:"area"`
 	Address    string  `json:"address"`
 	Look       int     `json:"look"`
@@ -122,6 +123,7 @@ func (u *Partlist) Add() error {
 		Area:       u.Area,
 		Address:    u.Address,
 		Look:       u.Look,
+		Images: u.Images,
 		Hot:        u.Hot,
 		Createtime: u.Createtime,
 		Updatetime: u.Updatetime,

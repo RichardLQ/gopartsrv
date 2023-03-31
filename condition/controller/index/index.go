@@ -61,6 +61,7 @@ func AddPartlist(c *gin.Context)  {
 		c.JSON(http.StatusOK, gin.H{"errs": err,"code":202, "msg": "请先登录", "data":""})
 		return
 	}
+	fmt.Println(c.PostForm("images"))
 	part:= model.Partlist{
 		Uid: c.PostForm("uid"),
 		Openid:c.PostForm("openid"),
