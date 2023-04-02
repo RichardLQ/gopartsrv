@@ -102,7 +102,8 @@ func (u *Partlist) Find2Search(page, pageSize int, buy bool) (*[]Partlist, error
 	//err := sqls.Joins("left join users on users.id = partlist.uid").
 	//	Select("*,? as buy,users.address as img", buy).Limit(pageSize).
 	//	Offset((page - 1) * pageSize).Find(list).Error
-	err := sqls.Limit(pageSize).Offset((page - 1) * pageSize).Find(list).Error
+	err := sqls.Debug().Limit(pageSize).Offset((page - 1) * pageSize).
+		Order("hot desc,createtime desc").Find(list).Error
 	if err != nil {
 		return &[]Partlist{}, err
 	}

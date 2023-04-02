@@ -40,7 +40,7 @@ func (u *Users) TableName() string {
 //查询内容
 func (u *Users) Find() (*Users, error) {
 	list := &Users{}
-	sqls := dbs.Debug().Table(u.TableName())
+	sqls := dbs.Table(u.TableName())
 	if u.Id != "" {
 		sqls = sqls.Where("id = ?", u.Id)
 	}
