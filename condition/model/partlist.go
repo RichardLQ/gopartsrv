@@ -102,12 +102,37 @@ func (u *Partlist) Find2Search(page, pageSize int, buy bool) (*[]Partlist, error
 	//err := sqls.Joins("left join users on users.id = partlist.uid").
 	//	Select("*,? as buy,users.address as img", buy).Limit(pageSize).
 	//	Offset((page - 1) * pageSize).Find(list).Error
-	err := sqls.Debug().Limit(pageSize).Offset((page - 1) * pageSize).
+	err := sqls.Limit(pageSize).Offset((page - 1) * pageSize).
 		Order("hot desc,createtime desc").Find(list).Error
 	if err != nil {
 		return &[]Partlist{}, err
 	}
 	return list, nil
+}
+
+func (u *Partlist)FindCount() int64 {
+	var num int64
+	sqls := dbs.Table(u.TableName())
+	if u.Hot != 0 {
+		sqls = sqls.Where("hot = ?", u.Hot)
+	}
+	if u.City != "" {
+		sqls = sqls.Where("city = ?", u.City)
+	}
+	if u.Area != "" {
+		sqls = sqls.Where("`area` = ?", u.Area)
+	}
+	if u.Content != "" {
+		sqls = sqls.Where("content like ?", "%"+u.Content+"%")
+	}
+	if u.Status != 0 {
+		sqls = sqls.Where("`status` = ?", u.Status)
+	}
+	err:=sqls.Count(&num).Error
+	if err!= nil {
+		return 0
+	}
+	return num
 }
 
 func (u *Partlist) Add() error {

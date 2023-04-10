@@ -38,14 +38,14 @@ func Hotlist(userId ,openid string,hot int) (*[]model.Partlist,error) {
 	return list,nil
 }
 
-func Partlist(userId,openid,search,city,area string,page,pageSize int)(*[]model.Partlist,error)  {
+func Partlist(userId,openid,search,city,area string,page,pageSize int)(*[]model.Partlist,int64,error)  {
 	user:=model.Users{
 		Id: userId,
 		Openid: openid,
 	}
 	users,err:=user.Find()
 	if err != nil {
-		return &[]model.Partlist{} ,fmt.Errorf("查询用户失败:%v",err)
+		return &[]model.Partlist{} ,0,fmt.Errorf("查询用户失败:%v",err)
 	}
 	part := model.Partlist{
 		City: city,
@@ -66,9 +66,10 @@ func Partlist(userId,openid,search,city,area string,page,pageSize int)(*[]model.
 		(*list)[i] = item
 	}
 	if err != nil {
-		return list ,fmt.Errorf("查询热门列表失败:%v",err)
+		return list ,0,fmt.Errorf("查询热门列表失败:%v",err)
 	}
-	return list,nil
+	total:=part.FindCount()
+	return list,total,nil
 }
 
 func IsBuy(openid,userId string) bool {
