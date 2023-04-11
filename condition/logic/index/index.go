@@ -38,7 +38,7 @@ func Hotlist(userId ,openid string,hot int) (*[]model.Partlist,error) {
 	return list,nil
 }
 
-func Partlist(userId,openid,search,city,area string,page,pageSize int)(*[]model.Partlist,int64,error)  {
+func Partlist(userId,openid,search,city,area string,page,pageSize,status int)(*[]model.Partlist,int64,error)  {
 	user:=model.Users{
 		Id: userId,
 		Openid: openid,
@@ -47,11 +47,14 @@ func Partlist(userId,openid,search,city,area string,page,pageSize int)(*[]model.
 	if err != nil {
 		return &[]model.Partlist{} ,0,fmt.Errorf("查询用户失败:%v",err)
 	}
+	if status == 0 {
+		status = 1
+	}
 	part := model.Partlist{
 		City: city,
 		Area: area,
 		Content: search,
-		Status: 1,
+		Status: status,
 	}
 	buy := false
 	local, _ := time.LoadLocation("Local")
@@ -89,3 +92,19 @@ func IsBuy(openid,userId string) bool {
 	}
 	return buy
 }
+
+
+//PartStatus 置顶/审核/下线
+func PartStatus(status,hot int,id string) error {
+	part := model.Partlist{
+		Id: id,
+		Status: status,
+		Hot: hot,
+	}
+	err := part.Updates()
+	if err != nil {
+		return fmt.Errorf("查询热门列表失败:%v",err)
+	}
+	return nil
+}
+

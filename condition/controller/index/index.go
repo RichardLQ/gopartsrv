@@ -37,12 +37,14 @@ func Partlist(c *gin.Context) {
 	openid := c.PostForm("openid")
 	pages := c.PostForm("page")
 	page, _ := strconv.Atoi(pages)
+	status := c.PostForm("status")
+	statuss, _ := strconv.Atoi(status)
 	pageSizes := c.PostForm("pageSize")
 	pageSize, _ := strconv.Atoi(pageSizes)
 	search := c.PostForm("search")
 	city := c.PostForm("city")
 	area := c.PostForm("area")
-	list,total,err:=index.Partlist(userId,openid,search,city,area,page,pageSize)
+	list,total,err:=index.Partlist(userId,openid,search,city,area,page,pageSize,statuss)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"errs": err, "msg": "请求失败", "data":list,"total":total})
 		return
@@ -101,6 +103,30 @@ func IsBuy(c *gin.Context)  {
 	c.JSON(http.StatusOK, gin.H{"errs": "请求成功","code":200,"buy":buy, "msg": "请求成功"})
 	return
 }
+
+//PartStatus 置顶/审核/下线
+func PartStatus(c *gin.Context)  {
+	status :=c.Query("status")//状态：1=正常;2=删除，3=待审核
+	statuss, _ := strconv.Atoi(status)
+	hot :=c.Query("hot")//热门：1=热门；2=非热门
+	hots, _ := strconv.Atoi(hot)
+	id :=c.Query("id")
+	openid :=c.Query("openid")
+	if openid == ""{
+		c.JSON(http.StatusOK, gin.H{"errs": "openid缺失","code":201,"msg": "openid缺失"})
+		return
+	}
+	err := index.PartStatus(statuss,hots,id)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"errs": err,"code":202,"msg": "更新失败"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"errs": "请求成功","code":200,"msg": "请求成功"})
+	return
+}
+
+
+
 
 func GetOpenid(c *gin.Context){
 	code := c.Query("code")

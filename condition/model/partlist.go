@@ -160,3 +160,19 @@ func (u *Partlist) Add() error {
 	}
 	return nil
 }
+
+func (u *Partlist) Updates() error {
+	data    := map[string]interface{}{}
+
+	if u.Status != 0 {
+		data["status"] = u.Status
+	}
+	if u.Hot != 0 {
+		data["hot"] = u.Hot
+	}
+	err := dbs.Table(u.TableName()).Where("id = ?",u.Id).Updates(data).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
